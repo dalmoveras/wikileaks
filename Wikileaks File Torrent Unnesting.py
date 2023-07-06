@@ -13,14 +13,17 @@ driver = webdriver.Chrome(options=chrome_options)
 
 
 def split(elems):
-    torrents = []
-    folders = []
-    for el in elems:
-        if '.torrent' in el.get_attribute('href'):
-            torrents.append(el)
-        else:
-            folders.append(el)
-    return (torrents, folders)
+    try:
+        torrents = []
+        folders = []
+        for el in elems:
+            if '.torrent' in el.get_attribute('href'):
+                torrents.append(el)
+            else:
+                folders.append(el)
+        return (torrents, folders)
+    except:
+        return ([],[])
 
 def traverse(elems):
    
@@ -31,7 +34,10 @@ def traverse(elems):
         for el in elems:
             el.click()
             print(driver.title)
-            tmp_elems = driver.find_elements(By.XPATH, "//a[@href]")
+            #if driver.title == 'Index of /torrent/aryan-nation-2009/msg00268/':
+                #import pdb;pdb.set_trace()
+            for x in driver.find_elements(By.XPATH, "//a[@href]"):
+                tmp_elems.append(x)
             driver.back()
     else:
         elems.click()
@@ -47,6 +53,8 @@ def traverse(elems):
         file.write('\n')
         driver.back()
         return
+
+
 
 def main():
     url = 'https://file.wikileaks.org/torrent/'
